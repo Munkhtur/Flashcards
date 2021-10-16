@@ -27,7 +27,9 @@
 {#if cards.length > 0}
   <Cards {cards} />
 {:else}
-  <div class="placeholder">No card to display</div>
+  <div class="placeholder">
+    No cards to display. Create an account and add your cards.
+  </div>
 {/if}
 
 <style>
