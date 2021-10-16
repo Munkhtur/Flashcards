@@ -11,8 +11,8 @@
   import { fade } from 'svelte/transition';
   import { db, app } from '../firebase';
 
-  let email = 'test@gmail.com';
-  let password = 'testpassword';
+  let email = '';
+  let password = '';
   let errorMessage = '';
   $: error = errorMessage;
   export let showLogin = false;
