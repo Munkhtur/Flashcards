@@ -9,7 +9,8 @@
 
   onMount(async () => {
     const q = query(collection(db, 'cards'));
-    unsub = onSnapshot(q, (querySnapshot) => {
+
+    unsub = onSnapshot(q, { includeMetadataChanges: true }, (querySnapshot) => {
       let arr = [];
       querySnapshot.forEach((doc) => {
         const newObj = doc.data();

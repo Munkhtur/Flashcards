@@ -26,6 +26,7 @@
   let isMessage = false;
   let unsub;
 
+  console.log($storeUser);
   const showMessage = (e) => {
     message = `<span class="${e.detail.status}">${e.detail.m}</span>`;
     isMessage = true;
@@ -36,15 +37,16 @@
     }, 3000);
   };
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) item = 'My Cards';
-    else storeUser.set({});
-    unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
-      const dbUser = user
-        ? { email: user.email, uid: user.uid, ...doc.data() }
-        : {};
-      storeUser.set(dbUser);
-    });
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      item = 'My Cards';
+      unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+        const dbUser = user
+          ? { email: user.email, uid: user.uid, ...doc.data() }
+          : {};
+        storeUser.set(dbUser);
+      });
+    } else storeUser.set({});
   });
 
   onDestroy(() => {

@@ -33,15 +33,19 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const q = query(collection(db, 'cards'), where('uid', '==', user.uid));
-      unsub = onSnapshot(q, (querySnapshot) => {
-        let arr = [];
-        querySnapshot.forEach((doc) => {
-          const newObj = doc.data();
-          newObj['id'] = doc.id;
-          arr = [...arr, newObj];
-        });
-        cards = arr;
-      });
+      unsub = onSnapshot(
+        q,
+        { includeMetadataChanges: true },
+        (querySnapshot) => {
+          let arr = [];
+          querySnapshot.forEach((doc) => {
+            const newObj = doc.data();
+            newObj['id'] = doc.id;
+            arr = [...arr, newObj];
+          });
+          cards = arr;
+        }
+      );
     }
   });
 

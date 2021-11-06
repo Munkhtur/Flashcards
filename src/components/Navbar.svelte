@@ -34,7 +34,9 @@
 </script>
 
 <nav>
-  <div><img src="/img/az.png" alt="Flash cards" width="50px" /></div>
+  <div>
+    <img src="/img/az.png" alt="Flash cards" width="50px" heigth="50px" />
+  </div>
 
   <div class="right">
     <ul>

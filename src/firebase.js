@@ -1,5 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import {
+  getFirestore,
+  enableIndexedDbPersistence,
+  enableMultiTabIndexedDbPersistence,
+  disableNetwork,
+  enableNetwork,
+} from 'firebase/firestore';
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 
@@ -16,6 +22,16 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = getFirestore();
+
+// enableIndexedDbPersistence(db).catch((err) => {
+//   if (err.code == 'failed-precondition') {
+//     console.log('failed precondition');
+//   } else if (err.code == 'unimplemented') {
+//     console.log('unimplemented');
+//   }
+// });
+
+// enableNetwork(db);
 
 export { app, db };
