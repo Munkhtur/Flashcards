@@ -37,8 +37,21 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (evt) => {
   if (evt.request.url.indexOf('firestore.googleapis.com') === -1) {
     evt.respondWith(
-      fetch(evt.request).catch(function () {
-        return caches.match(evt.request);
+      caches.match(evt.request).then((cacheRes) => {
+        return (
+          cacheRes ||
+          fetch(evt.request).then((fetchRes) => {
+            return caches.open(dynamicCacheName).then((cache) => {
+              if (evt.request.url.match('^(http|https)://')) {
+                cache.put(evt.request.url, fetchRes.clone());
+                // check cached items size
+              } else {
+                return;
+              }
+              return fetchRes;
+            });
+          })
+        );
       })
     );
   }
