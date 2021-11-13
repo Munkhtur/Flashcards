@@ -1,7 +1,13 @@
 <script>
   import { db, app } from '../firebase';
   import { storeUser } from '../store';
-  import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
+  import {
+    collection,
+    addDoc,
+    updateDoc,
+    doc,
+    setDoc,
+  } from 'firebase/firestore';
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { createEventDispatcher } from 'svelte';
   import Button from '../shared/Button.svelte';
@@ -24,18 +30,16 @@
   };
 
   const onSubmit = async () => {
-    try {
-      const docRef = await addDoc(collection(db, 'cards'), entry);
-      const userRef = doc(db, 'users', $storeUser.uid);
+    const data = entry;
+    entry = { ...entry, word: '', definition: '', usage: '' };
 
-      await updateDoc(userRef, 'currentCards', $storeUser.currentCards + 1);
+    showMessage('success', 'New card added.');
+    $storeUser.currentCards += 1;
+    await addDoc(collection(db, 'cards'), data);
 
-      entry = { ...entry, word: '', definition: '', usage: '' };
-      showMessage('success', 'New card added.');
-    } catch (e) {
-      console.error('Error adding document: ', e);
-      showMessage('error', 'Something went wrong.');
-    }
+    const userRef = doc(db, 'users', $storeUser.uid);
+
+    await updateDoc(userRef, 'currentCards', $storeUser.currentCards);
   };
   const auth = getAuth(app);
   onAuthStateChanged(auth, (user) => {

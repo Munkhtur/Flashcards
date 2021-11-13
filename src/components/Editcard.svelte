@@ -19,10 +19,10 @@
 
   const onSubmit = async () => {
     try {
-      const ref = doc(db, 'cards', entry.id);
-      await updateDoc(ref, entry);
       dispatch('closeedit');
       dispatch('showmessage', { status: 'success', m: 'Card updated' });
+      const ref = doc(db, 'cards', entry.id);
+      await updateDoc(ref, entry);
     } catch (error) {
       console.log(error);
     }

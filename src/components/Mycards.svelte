@@ -59,10 +59,11 @@
 
   const onDelete = async () => {
     if (confirm('Are you sure you want to delete?')) {
+      $storeUser.currentCards -= 1;
       const ref = doc(db, 'cards', cards[currentCard].id);
       await deleteDoc(ref);
       const userRef = doc(db, 'users', $storeUser.uid);
-      await updateDoc(userRef, 'currentCards', $storeUser.currentCards - 1);
+      await updateDoc(userRef, 'currentCards', $storeUser.currentCards);
       if (currentCard - 1 >= 0) {
         currentCard = currentCard - 1;
       }
@@ -70,15 +71,17 @@
   };
   const onMastered = async () => {
     if (confirm('Are you sure?')) {
+      $storeUser.currentCards -= 1;
+      $storeUser.mastered += 1;
       const ref = doc(db, 'cards', cards[currentCard].id);
       await deleteDoc(ref);
       const userRef = doc(db, 'users', $storeUser.uid);
       await updateDoc(
         userRef,
         'currentCards',
-        $storeUser.currentCards - 1,
+        $storeUser.currentCards,
         'mastered',
-        $storeUser.mastered + 1
+        $storeUser.mastered
       );
       if (currentCard - 1 >= 0) {
         currentCard = currentCard - 1;
@@ -133,4 +136,11 @@
     text-decoration: underline;
     cursor: pointer;
   }
+  /* .control-buttons {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+  } */
 </style>

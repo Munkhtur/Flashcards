@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { fade, slide, blur, scale, fly } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
   export let cards = [];
 
   export let currentActiveCard = 0;
@@ -92,22 +92,24 @@
     height: 300px;
     width: 40%;
     max-width: 100%;
-    margin: 0 auto;
+    margin: 50px auto 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   @media (max-width: 900px) {
     .cards {
       width: 60%;
     }
-    .navigation {
+    /* .navigation {
       order: 1;
-    }
+    } */
   }
   .card {
     position: absolute;
     opacity: 0;
     font-size: 1.5em;
-    top: 0;
-    left: 0;
+
     height: 100%;
     width: 100%;
     transform: translateX(50%) rotateY(-10deg);
@@ -215,7 +217,7 @@
     }
     .cards {
       height: 200px;
-      margin-bottom: 100px;
+      /* margin-bottom: 100px; */
     }
   }
   @media (max-width: 400px) {

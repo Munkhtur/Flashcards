@@ -104,6 +104,7 @@
       <div class="message">{@html message}</div>
     {/if}
   </div>
+  <div class="footer">kjdajsd</div>
 </main>
 <div class="tip">
   <ul>
@@ -122,15 +123,20 @@
     text-align: center;
     width: 100%;
     position: relative;
-    /* height: 90%; */
+    height: 80%;
   }
   .main-content {
     width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .message {
     position: absolute;
-    top: 40px;
+    top: 50px;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -138,11 +144,11 @@
     font-weight: 200;
   }
 
-  @media (min-width: 640px) {
+  /* @media (min-width: 640px) {
     main {
       max-width: none;
     }
-  }
+  } */
   /* @media (max-width: 1050px) {
     main {
       display: flex;
@@ -183,6 +189,11 @@
   li {
     margin-right: 10px;
     /* color: white; */
+  }
+
+  .footer {
+    background-color: black;
+    height: 10px;
   }
   @media (max-width: 1050px) {
     .tip {

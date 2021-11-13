@@ -1,4 +1,4 @@
-const staticCacheName = 'site-static-v2';
+const staticCacheName = 'site-static-v7';
 const dynamicCacheName = 'site-dynamic-v4';
 
 const assets = [
@@ -12,6 +12,16 @@ const assets = [
   '/fallback.html',
   'https://kit.fontawesome.com/87f14d78d7.js',
 ];
+
+const limitCacheSize = (name, size) => {
+  caches.open(name).then((cache) => {
+    cache.keys().then((keys) => {
+      if (keys.length > size) {
+        cache.delete(keys[0]).then(limitCacheSize(name, size));
+      }
+    });
+  });
+};
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -45,6 +55,7 @@ self.addEventListener('fetch', (evt) => {
               if (evt.request.url.match('^(http|https)://')) {
                 cache.put(evt.request.url, fetchRes.clone());
                 // check cached items size
+                limitCacheSize(dynamicCacheName, 15);
               } else {
                 return;
               }
