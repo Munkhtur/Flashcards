@@ -1,9 +1,14 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { fade, slide, blur, scale, fly } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
   export let cards = [];
 
   export let currentActiveCard = 0;
+  let isDragging = false,
+    startPosition = 0,
+    currentTranslate = 0,
+    prevTranslate = 0,
+    animationId = 0;
 
   const dispatch = createEventDispatcher();
   let showAnswer = false;
@@ -34,6 +39,44 @@
       toggleShow();
     }
   };
+  const touchStart = (event) => {
+    isDragging = true;
+    startPosition = getPositionX(event);
+
+    animationId = requestAnimationFrame(animation);
+  };
+
+  function touchEnd() {
+    isDragging = false;
+    cancelAnimationFrame(animationId);
+    const movedBy = currentTranslate - prevTranslate;
+
+    if (movedBy < -100 && currentActiveCard < cards.length - 1) {
+      nextSlide();
+    }
+    if (movedBy > 100 && currentActiveCard > 0) {
+      prevSlide();
+    }
+
+    // setPositionByIndex();
+  }
+  function touchMove(event) {
+    if (isDragging) {
+      const currentPosition = getPositionX(event);
+      currentTranslate = prevTranslate + currentPosition - startPosition;
+    }
+  }
+  function getPositionX(event) {
+    return event.type.includes('mouse')
+      ? event.pageX
+      : event.touches[0].clientX;
+  }
+
+  function animation() {
+    if (isDragging) {
+      requestAnimationFrame(animation);
+    }
+  }
 </script>
 
 <svelte:window on:keypress={keyPress} />
@@ -51,6 +94,9 @@
       class:show-answer={showAnswer}
       class:left={i === currentActiveCard - 1}
       on:click={toggleShow}
+      on:touchstart={touchStart}
+      on:touchend={touchEnd}
+      on:touchmove={touchMove}
     >
       <div class="inner-card">
         <div class="inner-card-front">
@@ -92,22 +138,24 @@
     height: 300px;
     width: 40%;
     max-width: 100%;
-    margin: 0 auto;
+    margin: 50px auto 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   @media (max-width: 900px) {
     .cards {
       width: 60%;
     }
-    .navigation {
+    /* .navigation {
       order: 1;
-    }
+    } */
   }
   .card {
     position: absolute;
     opacity: 0;
     font-size: 1.5em;
-    top: 0;
-    left: 0;
+
     height: 100%;
     width: 100%;
     transform: translateX(50%) rotateY(-10deg);
@@ -215,7 +263,7 @@
     }
     .cards {
       height: 200px;
-      margin-bottom: 100px;
+      /* margin-bottom: 100px; */
     }
   }
   @media (max-width: 400px) {

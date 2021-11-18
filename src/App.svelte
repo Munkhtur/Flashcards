@@ -26,6 +26,7 @@
   let isMessage = false;
   let unsub;
 
+  console.log($storeUser);
   const showMessage = (e) => {
     message = `<span class="${e.detail.status}">${e.detail.m}</span>`;
     isMessage = true;
@@ -36,15 +37,16 @@
     }, 3000);
   };
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) item = 'My Cards';
-    else storeUser.set({});
-    unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
-      const dbUser = user
-        ? { email: user.email, uid: user.uid, ...doc.data() }
-        : {};
-      storeUser.set(dbUser);
-    });
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      item = 'My Cards';
+      unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+        const dbUser = user
+          ? { email: user.email, uid: user.uid, ...doc.data() }
+          : {};
+        storeUser.set(dbUser);
+      });
+    } else storeUser.set({});
   });
 
   onDestroy(() => {
@@ -102,6 +104,7 @@
       <div class="message">{@html message}</div>
     {/if}
   </div>
+  <div class="footer">kjdajsd</div>
 </main>
 <div class="tip">
   <ul>
@@ -115,20 +118,24 @@
   main {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center;
+    justify-content: center; */
     text-align: center;
     width: 100%;
     position: relative;
-    /* height: 90%; */
+    height: 90%;
   }
   .main-content {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
   }
 
   .message {
     position: absolute;
-    top: 40px;
+    top: 50px;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -136,11 +143,11 @@
     font-weight: 200;
   }
 
-  @media (min-width: 640px) {
+  /* @media (min-width: 640px) {
     main {
       max-width: none;
     }
-  }
+  } */
   /* @media (max-width: 1050px) {
     main {
       display: flex;
@@ -182,9 +189,19 @@
     margin-right: 10px;
     /* color: white; */
   }
+
+  .footer {
+    background-color: black;
+    height: 10px;
+  }
   @media (max-width: 1050px) {
     .tip {
       display: none;
+    }
+  }
+  @media (max-width: 768px) {
+    .main-content {
+      padding-top: 50px;
     }
   }
 </style>

@@ -33,15 +33,19 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const q = query(collection(db, 'cards'), where('uid', '==', user.uid));
-      unsub = onSnapshot(q, (querySnapshot) => {
-        let arr = [];
-        querySnapshot.forEach((doc) => {
-          const newObj = doc.data();
-          newObj['id'] = doc.id;
-          arr = [...arr, newObj];
-        });
-        cards = arr;
-      });
+      unsub = onSnapshot(
+        q,
+        { includeMetadataChanges: true },
+        (querySnapshot) => {
+          let arr = [];
+          querySnapshot.forEach((doc) => {
+            const newObj = doc.data();
+            newObj['id'] = doc.id;
+            arr = [...arr, newObj];
+          });
+          cards = arr;
+        }
+      );
     }
   });
 
@@ -55,10 +59,11 @@
 
   const onDelete = async () => {
     if (confirm('Are you sure you want to delete?')) {
+      $storeUser.currentCards -= 1;
       const ref = doc(db, 'cards', cards[currentCard].id);
       await deleteDoc(ref);
       const userRef = doc(db, 'users', $storeUser.uid);
-      await updateDoc(userRef, 'currentCards', $storeUser.currentCards - 1);
+      await updateDoc(userRef, 'currentCards', $storeUser.currentCards);
       if (currentCard - 1 >= 0) {
         currentCard = currentCard - 1;
       }
@@ -66,15 +71,17 @@
   };
   const onMastered = async () => {
     if (confirm('Are you sure?')) {
+      $storeUser.currentCards -= 1;
+      $storeUser.mastered += 1;
       const ref = doc(db, 'cards', cards[currentCard].id);
       await deleteDoc(ref);
       const userRef = doc(db, 'users', $storeUser.uid);
       await updateDoc(
         userRef,
         'currentCards',
-        $storeUser.currentCards - 1,
+        $storeUser.currentCards,
         'mastered',
-        $storeUser.mastered + 1
+        $storeUser.mastered
       );
       if (currentCard - 1 >= 0) {
         currentCard = currentCard - 1;
@@ -128,5 +135,8 @@
     color: #ff6150;
     text-decoration: underline;
     cursor: pointer;
+  }
+  .control-buttons {
+    margin-top: auto;
   }
 </style>

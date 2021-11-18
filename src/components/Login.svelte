@@ -26,7 +26,6 @@
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
-        console.log(user);
         const ref = doc(db, 'users', user.uid);
         const dbUser = await getDoc(ref);
 
