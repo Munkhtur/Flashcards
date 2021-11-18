@@ -129,4 +129,7 @@
     text-decoration: underline;
     cursor: pointer;
   }
+  .control-buttons {
+    margin-top: auto;
+  }
 </style>
