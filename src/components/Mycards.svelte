@@ -136,11 +136,7 @@
     text-decoration: underline;
     cursor: pointer;
   }
-  /* .control-buttons {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-  } */
+  .control-buttons {
+    margin-top: auto;
+  }
 </style>

@@ -118,20 +118,19 @@
   main {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center;
+    justify-content: center; */
     text-align: center;
     width: 100%;
     position: relative;
-    height: 80%;
+    height: 90%;
   }
   .main-content {
     width: 100%;
-    height: 100%;
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
   }
 
   .message {
@@ -198,6 +197,11 @@
   @media (max-width: 1050px) {
     .tip {
       display: none;
+    }
+  }
+  @media (max-width: 768px) {
+    .main-content {
+      padding-top: 50px;
     }
   }
 </style>
